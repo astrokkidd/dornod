@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.net.*;
 
 /**
  * Text-Based Deal or No Deal Game
@@ -20,6 +21,16 @@ public class DealOrNoDeal {
      * @return  List of randomized cases
      */
     public Case[] setCases() {
+
+        /*URL url = this.getClass().getResource("CaseAmount.txt");
+        URI uri = null;
+        
+        try {
+            uri = url.toURI();
+        } catch(URISyntaxException e) {}
+        
+        File file = new File(uri);*/
+
         File file = new File("CaseAmounts.txt");
         Scanner s = null;
         ArrayList<String> amounts = new ArrayList<>();
@@ -47,10 +58,10 @@ public class DealOrNoDeal {
 
         Collections.shuffle(amounts);
 
-
         for (int i = 0; i < caseList.length; i++) {
             caseList[i].setNum(i + 1);
             caseList[i].setAmount(Integer.parseInt(amounts.get(i)));
+            caseList[i].setCanBPicked(true);
         }
 
         return caseList;
@@ -79,6 +90,19 @@ public class DealOrNoDeal {
             Case fooCase = pickCase(cases, Integer.parseInt(input));
             return fooCase;
         }
+        
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -161,14 +185,25 @@ public class DealOrNoDeal {
      * @return  The user's case
      */
     public Case initRound(Case[] cases) {
-        String input;
+        String input = "";
         Scanner s = new Scanner(System.in);
+
+        int inputInt = 0;
 
         System.out.println("Welcome to Deal or No Deal!");
         casePrintOut(cases);
-        System.out.println("Please choose your case: ");
-        input = s.nextLine();
-        Case yourCase = pickCase(cases, Integer.parseInt(input));
+        while (inputInt == 0) {
+            System.out.println("Please choose your case: ");
+            input = s.nextLine();
+
+            if (!isNumeric(input)) {
+                System.out.println("That's not a case!");
+            } else {
+                inputInt = Integer.parseInt(input);
+            }
+        }
+
+        Case yourCase = pickCase(cases, inputInt);
 
         System.out.println("You chose case number: " + yourCase.getNum());
         return yourCase;
@@ -188,23 +223,38 @@ public class DealOrNoDeal {
      */
     public boolean regRound(Case[] cases, Case yourCase, int numCases, int amountLeft, LinkedList<Case> casesPickedBig, LinkedList<Case> casesPickedSmall) {
         Scanner s = new Scanner(System.in);
-
+        String input = "";
         int sumBig;
         int sumSmall;
         int sumBigLeft = 0;
         int sumSmallLeft = 0;
+        int inputInt = 0;
 
 
         for (int i = numCases; i > 0; i--) {
             sumBig = 0;
             sumSmall = 0;
+            inputInt = 0;
 
             System.out.println();
             casePrintOut(cases);
-            System.out.println("Please choose " + i + " cases: ");
-            String input = s.nextLine();
-            Case pickedCase = pickCase(cases, Integer.parseInt(input));
+            
+            while (inputInt == 0) {
+                System.out.println("Please choose " + i + " cases: ");
+                input = s.nextLine();
 
+                if (!isNumeric(input)) {
+                    System.out.println("That's not a case!");
+                } else {
+                    inputInt = Integer.parseInt(input);
+                }
+            }  
+            
+
+            //inputInt = Integer.parseInt(input);
+            
+            Case pickedCase = pickCase(cases, inputInt);
+            
             if (pickedCase.getAmount() >= 100000) {
                 casesPickedBig.add(pickedCase);
             } else {
@@ -225,7 +275,7 @@ public class DealOrNoDeal {
             sumBigLeft = 3250000 - sumBig;
             sumSmallLeft = 168416 - sumSmall;
 
-            System.out.println(cases[Integer.parseInt(input) - 1]);
+            System.out.println(cases[inputInt - 1]);
         }
 
         return dealOrNoDeal(bankOffer(sumBigLeft, sumSmallLeft, amountLeft), yourCase);
