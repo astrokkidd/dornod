@@ -7,8 +7,8 @@
 
 public class Case {
     int num;
-    int amount;
-    boolean canBPicked;
+    double amount;
+    boolean canBePicked;
 
     /**
      * An initializing constructor
@@ -16,7 +16,7 @@ public class Case {
     public Case() {
         this.num = 0;
         this.amount = 0;
-        this.canBPicked = false;
+        this.canBePicked = false;
     }
 
     /**
@@ -26,10 +26,10 @@ public class Case {
      * @param num   Number of the case
      * @param amount    Amount of the case
      */
-    public Case(int num, int amount) {
+    public Case(int num, double amount) {
         this.num = num;
         this.amount = amount;
-        this.canBPicked = true;
+        this.canBePicked = true;
     }
 
     /**
@@ -46,17 +46,21 @@ public class Case {
      *
      * @param amount    Amount to set
      */
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
     /**
      * Sets if the case can be picked
      *
-     * @param canBPicked    Can it be picked
+     * @param canBePicked    Can it be picked
      */
-    public void setCanBPicked(boolean canBPicked) {
-        this.canBPicked = canBPicked;
+    public void setCanBePicked(boolean canBePicked) {
+        this.canBePicked = canBePicked;
+    }
+
+    public boolean getCanBePicked() {
+            return canBePicked;
     }
 
     /**
@@ -73,7 +77,7 @@ public class Case {
      *
      * @return  Amount of case
      */
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
