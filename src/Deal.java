@@ -93,6 +93,16 @@ public class Deal {
                         }
                 }
         }
+
+        public String formatAmount(double amount) {
+                String format;
+                if (amount < 1) {
+                        format = String.format("%.2f", amount);
+                } else {
+                        format = String.format("%,.0f", amount);
+                }
+                return format;
+        }
         //PRINTER HELPERS-------------------------------//
 
 
@@ -171,6 +181,8 @@ public class Deal {
         }
 
         public Case pickCase(Case[] cases, int caseNum, Scanner s) {
+                String input;
+                int inputInt = 0;
                 Case thisCase = cases[caseNum - 1];
 
                 if (thisCase.getCanBePicked()) {
@@ -178,10 +190,16 @@ public class Deal {
                         return thisCase;
                 } else {
                         printLine("You already chose that case!\n");
-                        pressEnter(7, s);
-                        printLine("\nPick a different case:\n");
+                        pressEnter(7, s);                    
 
-                        String input = s.nextLine();
+                        while (true) {
+                                printLine("\nPick a different case:\n");
+                                input = s.nextLine();
+        
+                                inputInt = inputCheck(input, s);
+                                if (inputInt > 0) {break;}
+                        }
+
                         Case newCase = pickCase(cases, Integer.parseInt(input), s);
                         return newCase;
                 }
@@ -198,7 +216,7 @@ public class Deal {
          * @param round
          * @return
          */
-        public double offer(Case[] cases, int round) {
+        public double offer(Case[] cases, Case yourCase, int round) {
                 double avg = 0;
                 int casesLeft = 0;
                 int offer;
@@ -210,6 +228,10 @@ public class Deal {
                                 casesLeft++;
                         }
                 }
+
+                avg += yourCase.getAmount();
+                casesLeft++;
+
                 avg = (avg / casesLeft);
 
 
@@ -234,8 +256,10 @@ public class Deal {
          */
         public boolean banker(double offer, Case yourCase, Scanner s) {
                 String input;
+                String fOffer = formatAmount(offer);                    //-- Formatted offer
+                String fYourCase = formatAmount(yourCase.getAmount());  //--Formatted case amount
 
-                printLine("\nThe banker is offering you $" + offer + "\n");
+                printLine("\nThe banker is offering you $" + fOffer + "\n");
 
                 while (true) {
                         printLine("\nDEAL...OR NO DEAL?\n");
@@ -246,11 +270,11 @@ public class Deal {
                 }
 
                 if (input.equalsIgnoreCase("deal")) {
-                        printLine("YOU JUST WON $" + offer + "!!!!\n");
-                        printLine("Your case number " + yourCase.getNum() + " had $" + yourCase.getAmount() + " in it!\n");
+                        printLine("YOU JUST WON $" + fOffer + "!!!!\n");
+                        printLine("Your case number " + yourCase.getNum() + " had $" + fYourCase + " in it!\n");
                         return false;
                 } else if (input.equalsIgnoreCase("no deal")) {
-                        printLine("You just turned down the banker's offer of $" + offer + "!\n");
+                        printLine("You just turned down the banker's offer of $" + fOffer + "!\n");
                         pressEnter(9, s);
                         return true;
                 }
@@ -310,12 +334,15 @@ public class Deal {
                                 inputInt = inputCheck(input, s);
                                 if (inputInt > 0) {break;}
                         }
+
+                        pickCase(cases, inputInt, s);
+
                         casePrintOut(cases, 8);
-                        printLine("\n\nCase number " + inputInt + " had $" + cases[inputInt - 1].getAmount());
-                        pressEnter(4, s);
+                        printLine("\n\nCase number " + inputInt + " had $" + formatAmount(cases[inputInt - 1].getAmount()) + "\n");
+                        pressEnter(5, s);
                 }
                 if (round > 4) { round = 4; }
-                return banker(offer(cases, round), yourCase, s);
+                return banker(offer(cases, yourCase, round), yourCase, s);
         }
 
         /**
@@ -324,6 +351,8 @@ public class Deal {
          * @param s
          */
         public void finalRound(Case yourCase, Scanner s) {
+                String fYourCase = formatAmount(yourCase.getAmount()); //--Formatted case amount
+
                 System.out.println("\nOnly two cases left...");
                 pressEnter(5, s);
                 System.out.println("\nYou chose to go all the way with case number " + yourCase.getNum() + ".");
@@ -332,7 +361,7 @@ public class Deal {
                 pressEnter(5, s);
                 System.out.println("\nWON");
                 pressEnter(5, s);
-                System.out.println("\n" + yourCase.getAmount() + "!!!!");
+                System.out.println("\n" + fYourCase + "!!!!");
         }
         //ROUNDS----------------------------------------//
 
@@ -365,6 +394,9 @@ public class Deal {
                         } else if (round <= 9) {        //-- Open 1 case at a time
                                 keepPlaying = play.regRound(cases, yourCase, 1, round, s);
                                 round++;
+                                if (!keepPlaying) {
+                                        round = 11; 
+                                }
                         } else if (round == 10) {       //-- Ride or die with your case
                                 play.finalRound(yourCase, s);
                                 round++;
