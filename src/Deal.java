@@ -22,8 +22,9 @@ public class Deal {
 
         //CONSTANTS-------------------------------------//
         int NUMCASES = 26;              //-- Total number of cases
+        int DEFCLEARLENGTH = 30;
         String revline = "\033[F\r";    //-- Reverse line token
-        String clearline = "                                                            "; //-- Whole lotta white space
+        //String clearline = "                                                            "; //-- Whole lotta white space
         //CONSTANTS-------------------------------------//
 
         
@@ -39,11 +40,29 @@ public class Deal {
          * Clear n lines
          * @param n
          */
-        public void clearLine(int n) {
-                for (int i = 0; i < n; i++) {
+        public void clearLine(int row, int col) {
+                for (int i = 0; i < row; i++) {
                         printLine(revline);
-                        printLine(clearline);
+                        for (int j = 0; j < col; j++) {
+                                System.out.print(" ");
+                        }
+                        //printLine(clearline);
                 }
+        }
+
+        public void printTitle(Scanner s) {
+                printLine(" .----------------.  .----------------.  .----------------.  .-----------------. .----------------.  .----------------. \n");
+                printLine("| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\n");
+                printLine("| |  ________    | || |     ____     | || |  _______     | || | ____  _____  | || |     ____     | || |  ________    | |\n");
+                printLine("| | |_   ___ `.  | || |   .'    `.   | || | |_   __ \\    | || ||_   \\|_   _| | || |   .'    `.   | || | |_   ___ `.  | |\n");
+                printLine("| |   | |   `. \\ | || |  /  .--.  \\  | || |   | |__) |   | || |  |   \\ | |   | || |  /  .--.  \\  | || |   | |   `. \\ | |\n");
+                printLine("| |   | |    | | | || |  | |    | |  | || |   |  __ /    | || |  | |\\ \\| |   | || |  | |    | |  | || |   | |    | | | |\n");
+                printLine("| |  _| |___.' / | || |  \\  `--'  /  | || |  _| |  \\ \\_  | || | _| |_\\   |_  | || |  \\  `--'  /  | || |  _| |___.' / | |\n");
+                printLine("| | |________.'  | || |   `.____.'   | || | |____| |___| | || ||_____|\\____| | || |   `.____.'   | || | |________.'  | |\n");
+                printLine("| |              | || |              | || |              | || |              | || |              | || |              | |\n");
+                printLine("| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |\n");
+                printLine(" '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' \n");
+                pressEnter(14, 120, s);
         }
 
         /**
@@ -52,7 +71,7 @@ public class Deal {
          * @param cl
          */
         public void casePrintOut(Case[] cases, int cl) {
-                clearLine(cl);
+                clearLine(cl, 30);
                 printLine("\n  ");
                 for (int i = 0; i < cases.length; i++) {
                         if (i == 6 || i == 19) {
@@ -80,16 +99,16 @@ public class Deal {
          * @param clearlines
          * @param s
          */
-        public void pressEnter(int clearlines, Scanner s) {
+        public void pressEnter(int clearlines, int length, Scanner s) {
                 String input;
                 while (true) {
                         printLine("\npress ENTER\n");
                         input = s.nextLine();
                         if (input.isEmpty()) {
-                                clearLine(clearlines);
+                                clearLine(clearlines, length);
                                 break;
                         } else {
-                                clearLine(3);
+                                clearLine(3, length);
                         }
                 }
         }
@@ -120,12 +139,12 @@ public class Deal {
 
                 if (!isNumeric(input) || input == null) {
                         printLine("That's not a case!\n");
-                        pressEnter(7, s);
+                        pressEnter(7, DEFCLEARLENGTH, s);
                 } else {
                         int temp = Integer.parseInt(input);
                         if (temp > NUMCASES) {
                                 printLine("That's not a case!\n");
-                                pressEnter(7, s);
+                                pressEnter(7, DEFCLEARLENGTH, s);
                         } else {
                                 inputInt = temp;
                         }
@@ -190,7 +209,7 @@ public class Deal {
                         return thisCase;
                 } else {
                         printLine("You already chose that case!\n");
-                        pressEnter(7, s);                    
+                        pressEnter(7, DEFCLEARLENGTH, s);                    
 
                         while (true) {
                                 printLine("\nPick a different case:\n");
@@ -266,7 +285,7 @@ public class Deal {
                         input = s.nextLine();
 
                         if (input.equalsIgnoreCase("deal") || input.equalsIgnoreCase("no deal")) { break; }
-                        clearLine(3);
+                        clearLine(3, DEFCLEARLENGTH);
                 }
 
                 if (input.equalsIgnoreCase("deal")) {
@@ -275,7 +294,7 @@ public class Deal {
                         return false;
                 } else if (input.equalsIgnoreCase("no deal")) {
                         printLine("You just turned down the banker's offer of $" + fOffer + "!\n");
-                        pressEnter(9, s);
+                        pressEnter(9, DEFCLEARLENGTH, s);
                         return true;
                 }
                 return false;
@@ -310,7 +329,7 @@ public class Deal {
                 Case yourCase = pickCase(cases, inputInt, s);
                 casePrintOut(cases, 8);
                 printLine("\n\nYou chose case number: " + yourCase.getNum() + "\n");
-                pressEnter(5, s);
+                pressEnter(5, DEFCLEARLENGTH, s);
                 return yourCase;
         }
 
@@ -339,7 +358,7 @@ public class Deal {
 
                         casePrintOut(cases, 8);
                         printLine("\n\nCase number " + inputInt + " had $" + formatAmount(cases[inputInt - 1].getAmount()) + "\n");
-                        pressEnter(5, s);
+                        pressEnter(5, 50, s);
                 }
                 if (round > 4) { round = 4; }
                 return banker(offer(cases, yourCase, round), yourCase, s);
@@ -354,13 +373,13 @@ public class Deal {
                 String fYourCase = formatAmount(yourCase.getAmount()); //--Formatted case amount
 
                 System.out.println("\nOnly two cases left...");
-                pressEnter(5, s);
+                pressEnter(5, DEFCLEARLENGTH, s);
                 System.out.println("\nYou chose to go all the way with case number " + yourCase.getNum() + ".");
-                pressEnter(5, s);
+                pressEnter(5, 50, s);
                 System.out.println("\nYOU");
-                pressEnter(5, s);
+                pressEnter(5, 5, s);
                 System.out.println("\nWON");
-                pressEnter(5, s);
+                pressEnter(5, 5, s);
                 System.out.println("\n" + fYourCase + "!!!!");
         }
         //ROUNDS----------------------------------------//
@@ -376,6 +395,8 @@ public class Deal {
                 Case yourCase = new Case(0, 0);
 
                 Scanner s = new Scanner(System.in);
+
+                play.printTitle(s);
                 
                 int regrounds = 6;
                 boolean keepPlaying = true;
