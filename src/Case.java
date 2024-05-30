@@ -1,3 +1,4 @@
+package src;
 /**
  * Case class that has a number,
  * an amount, and the ability to

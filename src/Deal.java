@@ -1,3 +1,4 @@
+package src;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -51,18 +52,12 @@ public class Deal {
         }
 
         public void printTitle(Scanner s) {
-                printLine(" .----------------.  .----------------.  .----------------.  .-----------------. .----------------.  .----------------. \n");
-                printLine("| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\n");
-                printLine("| |  ________    | || |     ____     | || |  _______     | || | ____  _____  | || |     ____     | || |  ________    | |\n");
-                printLine("| | |_   ___ `.  | || |   .'    `.   | || | |_   __ \\    | || ||_   \\|_   _| | || |   .'    `.   | || | |_   ___ `.  | |\n");
-                printLine("| |   | |   `. \\ | || |  /  .--.  \\  | || |   | |__) |   | || |  |   \\ | |   | || |  /  .--.  \\  | || |   | |   `. \\ | |\n");
-                printLine("| |   | |    | | | || |  | |    | |  | || |   |  __ /    | || |  | |\\ \\| |   | || |  | |    | |  | || |   | |    | | | |\n");
-                printLine("| |  _| |___.' / | || |  \\  `--'  /  | || |  _| |  \\ \\_  | || | _| |_\\   |_  | || |  \\  `--'  /  | || |  _| |___.' / | |\n");
-                printLine("| | |________.'  | || |   `.____.'   | || | |____| |___| | || ||_____|\\____| | || |   `.____.'   | || | |________.'  | |\n");
-                printLine("| |              | || |              | || |              | || |              | || |              | || |              | |\n");
-                printLine("| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |\n");
-                printLine(" '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' \n");
-                pressEnter(14, 120, s);
+                printLine("██████   ██████  ██████  ███    ██  ██████  ██████  \n");
+                printLine("██   ██ ██    ██ ██   ██ ████   ██ ██    ██ ██   ██ \n");
+                printLine("██   ██ ██    ██ ██████  ██ ██  ██ ██    ██ ██   ██ \n");
+                printLine("██   ██ ██    ██ ██   ██ ██  ██ ██ ██    ██ ██   ██ \n");
+                printLine("██████   ██████  ██   ██ ██   ████  █████  ██████  \n");
+                pressEnter(8, 52, s);
         }
 
         /**
@@ -294,7 +289,7 @@ public class Deal {
                         return false;
                 } else if (input.equalsIgnoreCase("no deal")) {
                         printLine("You just turned down the banker's offer of $" + fOffer + "!\n");
-                        pressEnter(9, DEFCLEARLENGTH, s);
+                        pressEnter(9, 52, s);
                         return true;
                 }
                 return false;
@@ -315,7 +310,7 @@ public class Deal {
                 String input;
                 int inputInt = 0;
 
-                System.out.println("Welcome to DORNOD!");
+                System.out.println("\nWelcome to DORNOD!");
                 casePrintOut(cases, 0);
                 System.out.println();
                 while (true) {
