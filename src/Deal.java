@@ -25,7 +25,6 @@ public class Deal {
         int NUMCASES = 26;              //-- Total number of cases
         int DEFCLEARLENGTH = 30;
         String revline = "\033[F\r";    //-- Reverse line token
-        //String clearline = "                                                            "; //-- Whole lotta white space
         //CONSTANTS-------------------------------------//
 
         
@@ -56,7 +55,7 @@ public class Deal {
                 printLine("██   ██ ██    ██ ██   ██ ████   ██ ██    ██ ██   ██ \n");
                 printLine("██   ██ ██    ██ ██████  ██ ██  ██ ██    ██ ██   ██ \n");
                 printLine("██   ██ ██    ██ ██   ██ ██  ██ ██ ██    ██ ██   ██ \n");
-                printLine("██████   ██████  ██   ██ ██   ████  █████  ██████  \n");
+                printLine("██████   ██████  ██   ██ ██   ████   █████  ██████  \n");
                 pressEnter(8, 52, s);
         }
 
@@ -375,7 +374,7 @@ public class Deal {
                 pressEnter(5, 5, s);
                 System.out.println("\nWON");
                 pressEnter(5, 5, s);
-                System.out.println("\n" + fYourCase + "!!!!");
+                System.out.println("\n$" + fYourCase + "!!!!\n");
         }
         //ROUNDS----------------------------------------//
 
